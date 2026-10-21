@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Owl Traffic Report · Boca Raton</title>
+  <meta name="description" content="Traffic patterns on the roads around Florida Atlantic University's Boca Raton campus, using free FDOT traffic count data.">
+  <link rel="icon" href="img/owls-logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top">
+        <img src="img/owls-logo.svg" alt="Florida Atlantic Owls logo" width="56" height="36">
+        <span>Owl Traffic Report</span>
+      </a>
+      <nav>
+        <a href="#map">Map</a>
+        <a href="#corridors">Corridors</a>
+        <a href="#trends">Trends</a>
+        <a href="#rush">Rush hour</a>
+        <a href="#gallery">Roads</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-bg" style="background-image:url('img/glades-fau.jpg')"></div>
+    <div class="wrap hero-inner">
+      <img class="hero-logo" src="img/owls-logo.svg" alt="" width="200" height="128">
+      <div>
+        <p class="eyebrow">Boca Raton · Florida Atlantic University</p>
+        <h1>How the roads around FAU really move</h1>
+        <p class="lede">Glades Road, I‑95, Military Trail, Yamato and the rest of the streets Owls use to get to campus, measured by the Florida Department of Transportation's annual traffic counts.</p>
+        <p class="data-status" id="data-status"><span class="dot"></span>Loading FDOT data…</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="kpis" id="kpis" aria-label="Key numbers"></section>
+
+    <section id="map" class="card">
+      <div class="section-head">
+        <div>
+          <h2>Traffic map around campus</h2>
+          <p class="sub">Each segment is colored by its Annual Average Daily Traffic (AADT), the average number of vehicles per day in both directions. Click a road for details.</p>
+        </div>
+        <label class="select">Year
+          <select id="year-select"></select>
+        </label>
+      </div>
+      <div id="leaflet-map" role="region" aria-label="Map of traffic volumes"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section id="corridors" class="card">
+      <div class="section-head">
+        <div>
+          <h2>Busiest corridors near FAU</h2>
+          <p class="sub">Average daily vehicles across each road's counted segments in the Boca Raton area.</p>
+        </div>
+      </div>
+      <div class="chart-box tall"><canvas id="corridor-chart"></canvas></div>
+    </section>
+
+    <section id="trends" class="card">
+      <div class="section-head">
+        <div>
+          <h2>Five-year trend</h2>
+          <p class="sub">How volumes changed from 2021 to the latest count. Toggle roads below.</p>
+        </div>
+      </div>
+      <div class="chip-row" id="trend-chips"></div>
+      <div class="chart-box"><canvas id="trend-chart"></canvas></div>
+      <div class="growth-table" id="growth-table"></div>
+    </section>
+
+    <section id="rush" class="card">
+      <div class="section-head">
+        <div>
+          <h2>Rush hour math</h2>
+          <p class="sub">FDOT publishes three factors with each count. They turn a daily total into what a busy hour actually looks like.</p>
+        </div>
+        <label class="select">Road
+          <select id="rush-select"></select>
+        </label>
+      </div>
+      <div class="rush-grid" id="rush-grid"></div>
+      <p class="fineprint">K = share of daily traffic in the design peak hour · D = share of peak-hour traffic going the heavier direction · T = share of daily traffic that is trucks. Values are averages of the road's segments in the selected year.</p>
+    </section>
+
+    <section id="tips" class="card owl-tips">
+      <h2>Owl commuter notes</h2>
+      <div class="tips-grid">
+        <div class="tip">
+          <h3>Glades Road is the front door</h3>
+          <p>Glades (SR 808) runs along the south edge of campus and connects FAU to I‑95, the Turnpike and Town Center. It is the busiest surface road in the study area, so plan extra time between I‑95 and Military Trail.</p>
+        </div>
+        <div class="tip">
+          <h3>I‑95 dwarfs everything</h3>
+          <p>The interstate just east of campus carries several times the volume of any local road. Exit 45 (Glades) and Exit 48 (Yamato / Spanish River / FAU Blvd) are the campus exits.</p>
+        </div>
+        <div class="tip">
+          <h3>Try the north entrance</h3>
+          <p>FAU Boulevard links campus to Spanish River Boulevard and Yamato Road. It carries a fraction of Glades' traffic and can be a calmer way in.</p>
+        </div>
+        <div class="tip">
+          <h3>Game days and events</h3>
+          <p>Football at the stadium and big events concentrate traffic on Glades, FAU Blvd and the I‑95 ramps. FDOT's annual averages smooth these out, so expect worse than the map on those days.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="card">
+      <h2>The roads</h2>
+      <p class="sub">Photos of Boca Raton's main roads from Wikimedia Commons.</p>
+      <div class="gallery">
+        <figure><img src="img/glades-fau.jpg" alt="SR 808 Glades Road signs next to Florida Atlantic University" loading="lazy"><figcaption><b>Glades Road by FAU.</b> SR 808 signs along the campus edge.</figcaption></figure>
+        <figure><img src="img/glades-us1.jpg" alt="Southbound US 1 at Glades Road, the eastern end of SR 808" loading="lazy"><figcaption><b>Glades Road at US‑1.</b> The eastern end of SR 808.</figcaption></figure>
+        <figure><img src="img/i95-fau.jpg" alt="I-95 northbound guide sign for exit 48 to Yamato Road and FAU Boulevard" loading="lazy"><figcaption><b>I‑95 Exit 48.</b> Yamato Rd, Spanish River and FAU Blvd.</figcaption></figure>
+        <figure><img src="img/yamato.jpg" alt="Yamato Road westbound at sunset in Boca Raton" loading="lazy"><figcaption><b>Yamato Road.</b> SR 794 westbound at sunset.</figcaption></figure>
+        <figure><img src="img/spanish-river.jpg" alt="Eastbound on SR 800 Spanish River Boulevard near Boca Raton" loading="lazy"><figcaption><b>Spanish River Blvd.</b> SR 800 heading east.</figcaption></figure>
+        <figure><img src="img/us1.jpg" alt="US Highway 1 road sign in Boca Raton" loading="lazy"><figcaption><b>Federal Highway.</b> US‑1 through Boca Raton.</figcaption></figure>
+        <figure><img src="img/a1a.jpg" alt="State Road A1A along the coast in Boca Raton" loading="lazy"><figcaption><b>A1A.</b> The coastal road east of downtown.</figcaption></figure>
+        <figure><img src="img/fau-stadium.jpg" alt="FAU Stadium lit up at night" loading="lazy"><figcaption><b>FAU Stadium.</b> Game nights load up Glades and FAU Blvd.</figcaption></figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <img src="img/wordmark.svg" alt="Florida Atlantic Owls wordmark" class="footer-mark" width="138" height="54">
+      <p><b>Data:</b> <a href="https://tdaappsprod.dot.state.fl.us/fto/" rel="noopener">Florida Traffic Online</a>, Florida Department of Transportation, Transportation Data &amp; Analytics Office (public ArcGIS service, no key required). Fetched live in your browser, with a bundled snapshot as backup. Basemap © Esri and <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors.</p>
+      <p><b>Photos (Wikimedia Commons):</b> Glades Rd signs, Glades at US‑1, I‑95 Exit 48 by formulanone (CC BY‑SA 2.0) · Yamato Rd, Spanish River Blvd, A1A by Juliancolton (public domain) · US‑1 sign by Doug Kerr (CC BY‑SA 2.0) · FAU Stadium by Jerseydem (CC BY‑SA 3.0).</p>
+      <p class="disclaimer">An unofficial fan project, not affiliated with or endorsed by Florida Atlantic University. The Owls logo and wordmark are trademarks of Florida Atlantic University. Go Owls!</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
